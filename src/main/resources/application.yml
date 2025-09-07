@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: pandemic
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pandemic
+    username: pandemic
+    password: pandemic
+
+  jooq:
+    sql-dialect: POSTGRES
+
+  profiles:
+    active: prod # dev | prod
+
+#spring.sql.init.mode=always
+#spring.sql.init.schema-locations=classpath:sql/*.sql

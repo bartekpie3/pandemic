@@ -1,0 +1,846 @@
+{
+	"info": {
+		"_postman_id": "a0595ee1-5d8d-449e-8ab2-c2ee344fd95e",
+		"name": "Pandemic",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29535409"
+	},
+	"item": [
+		{
+			"name": "Player Action Step",
+			"item": [
+				{
+					"name": "Move",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destinationCityName\": \"MIAMI\",\n    \"moveType\": \"DRIVE\" // DRIVE, CHARTER_FLIGHT, SHUTTLE_FLIGHT, DIRECT_FLIGHT\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/move",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"move"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Perform Action Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"destinationCityName\": \"MIAMI\",\n    \"moveType\": \"DRIVE\" // DRIVE, CHARTER_FLIGHT, SHUTTLE_FLIGHT, DIRECT_FLIGHT\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/games/{{gameId}}/actions/move",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"games",
+										"{{gameId}}",
+										"actions",
+										"move"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Sep 2025 08:37:11 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Player moved to MIAMI\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Build research station",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/games/{{gameId}}/actions/build-research-station",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"build-research-station"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Discover clue",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cardsUsed\": [\"ATLANTA\", \"CHICAGO\", \"WASHINGTON\", \"MONTREAL\", \"MADRID\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/discover-clue",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"discover-clue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Share knowledge",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"playerToSwap\": 1,\n    \"cityCardName\": \"ATLANTA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/share-knowledge",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"share-knowledge"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Treat disease",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"disease\": \"BLUE\" // BLUE, RED, BLACK, YELLOW\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/treat-disease",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"treat-disease"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Treat Disease Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"disease\": \"BLUE\" // BLUE, RED, BLACK, YELLOW\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/games/{{gameId}}/actions/treat-disease",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"games",
+										"{{gameId}}",
+										"actions",
+										"treat-disease"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 12 Sep 2025 08:38:45 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Player cured 0 disease\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Pass",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/pass",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"pass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Operations expert special move",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"destinationCityName\": \"MIAMI\",\n    \"cardName\": \"ATLANTA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/operations-expert-special-move",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"operations-expert-special-move"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dispatcher move player to player",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"playerIndexWhichMoves\": 1,\n    \"playerIndexToWhichMoves\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/dispatched-move-player-to-player",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"dispatched-move-player-to-player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dispatcher move player",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"playerIndexWhichMoves\": 1,\n    \"destinationCityName\": \"MIAMI\",\n    \"moveType\": \"DRIVE\" // DRIVE, CHARTER_FLIGHT, SHUTTLE_FLIGHT, DIRECT_FLIGHT\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/actions/dispatched-move-player",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"actions",
+								"dispatched-move-player"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cards Actions",
+			"item": [
+				{
+					"name": "Discard card",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/cards/discard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"cards",
+								"discard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Play event card",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"playerIndex\": 1,\n    \"cardName\": \"ATLANTA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/cards/play-event",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"cards",
+								"play-event"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create game",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response is ok\", () => {",
+							"    pm.response.to.have.status(201)",
+							"",
+							"    const jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"gameId\");",
+							"})",
+							"",
+							"if (pm.response.code == 201) {",
+							"    pm.environment.set(\"gameId\", pm.response.json().gameId);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"players\": [\n        \"MEDIC\",\n        \"OPERATIONS_EXPERT\"\n        // \"SCIENTIST\",\n        // \"RESEARCHER\",\n        // \"DISPATCHER\",\n        // \"CONTINGENCY_PLANNER\",\n        // \"QUARANTINE_SPECIALIST\"\n    ],\n    \"gameMode\": \"EASY\" // EASY, NORMAL, HARD\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/games",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"games"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"players\": [\n        \"MEDIC\",\n        \"SCIENTIST\"\n    ],\n    \"gameMode\": \"EASY\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/games",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"games"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Location",
+							"value": "/games/ea97a52a-3903-4697-abe3-6b20539d17db"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 08 Sep 2025 11:14:33 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"gameId\": \"ea97a52a-3903-4697-abe3-6b20539d17db\"\n}"
+				},
+				{
+					"name": "Bad request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"players\": [\n        \"MEDIC\"\n    ],\n    \"gameMode\": \"EASY\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/games",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 12 Sep 2025 08:13:53 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"players\": \"Number of players must be between 2 and 4\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get game",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/games/{{gameId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"games",
+						"{{gameId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get game success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 10 Sep 2025 13:32:46 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"b570e89b-6beb-430f-a086-57a01416b72c\",\n    \"state\": \"ACTION\",\n    \"currentPlayerTurnIndex\": 0,\n    \"diseases\": {\n        \"RED\": {\n            \"isCured\": false,\n            \"isEradicated\": false\n        },\n        \"BLUE\": {\n            \"isCured\": false,\n            \"isEradicated\": false\n        },\n        \"BLACK\": {\n            \"isCured\": false,\n            \"isEradicated\": false\n        },\n        \"YELLOW\": {\n            \"isCured\": false,\n            \"isEradicated\": false\n        }\n    },\n    \"outbreakMarkerPosition\": 0,\n    \"infectionRate\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "Get players",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Get players success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/players",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"players"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 12 Sep 2025 08:10:46 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"role\": \"SCIENTIST\",\n        \"currentLocation\": \"ATLANTA\",\n        \"numberOfAvailableActions\": 4,\n        \"cardsInHand\": [\n            \"LIMA\",\n            \"CHENNAI\",\n            \"BOGOTA\",\n            \"PETERSBURG\"\n        ]\n    },\n    {\n        \"role\": \"MEDIC\",\n        \"currentLocation\": \"ATLANTA\",\n        \"numberOfAvailableActions\": 0,\n        \"cardsInHand\": [\n            \"MONTREAL\",\n            \"MADRID\",\n            \"ESSEN\",\n            \"BUENOS_AIRES\"\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get cities",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Get cities success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/games/{{gameId}}/cities",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"games",
+								"{{gameId}}",
+								"cities"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 12 Sep 2025 08:10:51 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"name\": \"ATLANTA\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": true,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 2\n        }\n    },\n    {\n        \"name\": \"CHICAGO\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"WASHINGTON\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"NEW_YORK\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MONTREAL\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"SAN_FRANCISCO\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MADRID\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"PARIS\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"LONDON\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"ESSEN\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 2\n        }\n    },\n    {\n        \"name\": \"MILAN\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"PETERSBURG\",\n        \"color\": \"BLUE\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MIAMI\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MEXICO\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 3,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"LOS_ANGELES\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"BOGOTA\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"SAO_PAOLO\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"LIMA\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"SANTIAGO\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"BUENOS_AIRES\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"LAGOS\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"KHARTOUM\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"KINSHASA\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"JOHANNESBURG\",\n        \"color\": \"YELLOW\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"SYDNEY\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MANILA\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"HO_CHI_MINH\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 2,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"JAKARTA\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"BANGKOK\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"HONG_KONG\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"TAIPEI\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"OSAKA\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"SHANGHAI\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"BEIJING\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 1,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"SEOUL\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"TOKYO\",\n        \"color\": \"RED\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 3,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MOSCOW\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"DELHI\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 1,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"TEHRAN\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 3,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"BAGHDAD\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"RIYADH\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"KARACHI\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"KOLKATA\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"CHENNAI\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"MUMBAI\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"ALGIERS\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"CAIRO\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 0,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    },\n    {\n        \"name\": \"ISTANBUL\",\n        \"color\": \"BLACK\",\n        \"hasResearchStation\": false,\n        \"diseases\": {\n            \"RED\": 0,\n            \"BLACK\": 1,\n            \"YELLOW\": 0,\n            \"BLUE\": 0\n        }\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Draw Card Step",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/games/{{gameId}}/steps/draw-card",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"games",
+						"{{gameId}}",
+						"steps",
+						"draw-card"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Infect Cities Step",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/games/{{gameId}}/steps/infect-cities",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"games",
+						"{{gameId}}",
+						"steps",
+						"infect-cities"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}
