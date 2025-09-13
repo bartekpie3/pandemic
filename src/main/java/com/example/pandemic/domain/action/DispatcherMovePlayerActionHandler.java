@@ -8,7 +8,7 @@ import com.example.pandemic.domain.model.Player;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class DispatcherMovePlayerActionHandler
+final class DispatcherMovePlayerActionHandler
     implements ActionHandler<DispatcherMovePlayerActionRequest> {
 
   @Override

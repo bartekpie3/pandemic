@@ -9,7 +9,7 @@ import com.example.pandemic.domain.model.Player;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class OperationsExpertSpecialMoveActionHandler
+final class OperationsExpertSpecialMoveActionHandler
     implements ActionHandler<OperationsExpertSpecialMoveActionRequest> {
 
   @Override
@@ -44,7 +44,7 @@ class OperationsExpertSpecialMoveActionHandler
       return new Result.Failure<>("Player is not Operations expert");
     }
 
-    if (activePlayer.isHasSpecialActionUsed()) {
+    if (activePlayer.hasSpecialActionUsed()) {
       return new Result.Failure<>("Player has already used special action");
     }
 

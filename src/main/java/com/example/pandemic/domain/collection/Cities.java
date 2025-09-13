@@ -7,9 +7,8 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import lombok.NonNull;
-import org.springframework.data.util.Streamable;
 
-public class Cities {
+public class Cities implements CitiesCollection {
 
   private final Map<City.Name, City> cities;
 
@@ -45,10 +44,6 @@ public class Cities {
 
   public City get(City.Name cityName) {
     return cities.get(cityName);
-  }
-
-  public Streamable<City> stream() {
-    return Streamable.of(cities.values());
   }
 
   public Collection<City> asList() {

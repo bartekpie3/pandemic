@@ -1,0 +1,70 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  DB_NAME: pandemic
+  DB_USER: pandemic
+  DB_PASSWORD: pandemic
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_NAME }}
+        options: >-
+          --health-cmd="pg_isready -U $DB_USER -d $DB_NAME"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v5
+
+      - name: setup jdk 24
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'corretto'
+          java-version: 24
+          cache: 'gradle'
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..10}; do
+            pg_isready -h localhost -p 5432 -U $DB_USER -d $DB_NAME && break
+            echo "Waiting for postgres..."
+            sleep 5
+          done
+
+      - name: Verify database connection
+        run: psql -h localhost -U $DB_USER -d $DB_NAME -c "SELECT 1;"
+        env:
+          PGPASSWORD: ${{ env.DB_PASSWORD }}
+
+      - name: Import init-schema.sql
+        run: |
+          psql -h localhost -U $DB_USER -d $DB_NAME -f ./src/main/resources/sql/init-schema.sql
+        env:
+          PGPASSWORD: ${{ env.DB_PASSWORD }}
+
+      - name: Verify schema
+        run: |
+          psql -h localhost -U $DB_USER -d $DB_NAME -c "\dt"
+        env:
+          PGPASSWORD: ${{ env.DB_PASSWORD }}
+
+      - name: build the app
+        run: ./gradlew clean build

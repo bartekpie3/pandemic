@@ -52,7 +52,7 @@ final class DiscoverCureActionHandler implements ActionHandler<DiscoverClueActio
     game.findPlayer(Player.Role.MEDIC)
         .map(
             p -> {
-              game.cities().get(p.getCurrentLocation()).treatDisease(disease, City.MAX_DISEASE);
+              game.cities().get(p.getCurrentLocation()).treatDisease(disease, City.MAX_DISEASE_IN_CITY);
               return p;
             })
         .ifPresent(

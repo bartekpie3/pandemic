@@ -1,15 +1,15 @@
-package com.example.pandemic.infrastructure.repository;
+package com.example.pandemic.infrastructure.repository.Jooq;
 
 import static com.example.jooq.generated.Tables.*;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.select;
 
-import com.example.pandemic.application.query.CityDto;
-import com.example.pandemic.application.query.GameDto;
-import com.example.pandemic.application.query.PlayerDto;
-import com.example.pandemic.application.query.QueryGameRepository;
 import com.example.pandemic.domain.Game;
-import com.example.pandemic.infrastructure.mapper.JooqQueryGameMapper;
+import com.example.pandemic.domain.QueryGameRepository;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
+import com.example.pandemic.domain.exception.GameNotFound;
 import java.util.List;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Profile("prod")
 @RequiredArgsConstructor
-public class JooqQueryGameRepository implements QueryGameRepository {
+class JooqQueryGameRepository implements QueryGameRepository {
 
   private final DSLContext dsl;
 
@@ -31,7 +31,10 @@ public class JooqQueryGameRepository implements QueryGameRepository {
 
   @Override
   public GameDto get(Game.@NonNull Id gameId) {
-    return dsl.selectFrom(GAME).where(GAME.ID.eq(gameId.value())).fetchOne(mapper::mapGame);
+    return dsl.selectFrom(GAME)
+        .where(GAME.ID.eq(gameId.value()))
+        .fetchOptional(mapper::mapGame)
+        .orElseThrow(() -> new GameNotFound("Game not found: " + gameId));
   }
 
   @Override

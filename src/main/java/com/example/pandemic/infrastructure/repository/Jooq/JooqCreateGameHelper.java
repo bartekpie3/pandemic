@@ -1,4 +1,4 @@
-package com.example.pandemic.infrastructure.repository;
+package com.example.pandemic.infrastructure.repository.Jooq;
 
 import static com.example.jooq.generated.tables.Cities.CITIES;
 import static com.example.jooq.generated.tables.InfectionDeckCards.INFECTION_DECK_CARDS;
@@ -7,57 +7,54 @@ import static com.example.jooq.generated.tables.PlayerCards.PLAYER_CARDS;
 import static com.example.jooq.generated.tables.PlayerDeckCards.PLAYER_DECK_CARDS;
 import static com.example.jooq.generated.tables.Players.PLAYERS;
 
-import com.example.jooq.generated.tables.records.PlayerCardsRecord;
 import com.example.jooq.generated.tables.records.PlayersRecord;
-import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.card.Card;
+import com.example.pandemic.domain.card.CardDeck;
+import com.example.pandemic.domain.card.InfectionCard;
 import com.example.pandemic.domain.card.PlayerCard;
+import com.example.pandemic.domain.collection.CitiesCollection;
 import com.example.pandemic.domain.model.Disease;
 import com.example.pandemic.domain.model.Player;
 import java.util.List;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Table;
 import org.jooq.TableField;
 
-@RequiredArgsConstructor
-public class JooqCreateGameHelper {
+record JooqCreateGameHelper(DSLContext dsl) {
 
-  private final DSLContext dsl;
-
-  public void createInfectionDiscardPile(Game game) {
+  public void saveInfectionDiscardPile(CardDeck<InfectionCard> infectionDiscardPile, UUID gameId) {
     saveDeck(
         INFECTION_DISCARD_PILE_CARDS,
         INFECTION_DISCARD_PILE_CARDS.ID,
         INFECTION_DISCARD_PILE_CARDS.NAME,
         INFECTION_DISCARD_PILE_CARDS.GAME_ID,
         INFECTION_DISCARD_PILE_CARDS.DECK_ORDER,
-        game.getInfectionDiscardPile().getCards(),
-        game.getId().value());
+        infectionDiscardPile.getCards(),
+        gameId);
   }
 
-  public void createInfectionDeck(Game game) {
+  public void saveInfectionDeck(CardDeck<InfectionCard> infectionDeck, UUID gameId) {
     saveDeck(
         INFECTION_DECK_CARDS,
         INFECTION_DECK_CARDS.ID,
         INFECTION_DECK_CARDS.NAME,
         INFECTION_DECK_CARDS.GAME_ID,
         INFECTION_DECK_CARDS.DECK_ORDER,
-        game.getInfectionDeck().getCards(),
-        game.getId().value());
+        infectionDeck.getCards(),
+        gameId);
   }
 
-  public void createPlayerDeck(Game game) {
+  public void savePlayerDeck(CardDeck<PlayerCard> playerDeck, UUID gameId) {
     saveDeck(
         PLAYER_DECK_CARDS,
         PLAYER_DECK_CARDS.ID,
         PLAYER_DECK_CARDS.NAME,
         PLAYER_DECK_CARDS.GAME_ID,
         PLAYER_DECK_CARDS.DECK_ORDER,
-        game.getPlayerDeck().getCards(),
-        game.getId().value());
+        playerDeck.getCards(),
+        gameId);
   }
 
   private <T extends Record> void saveDeck(
@@ -69,7 +66,6 @@ public class JooqCreateGameHelper {
       List<Card> cards,
       UUID gameId) {
     var insert = dsl.insertInto(table, idField, nameField, gameIdField, orderField);
-
     var deckOrder = 0;
 
     for (var card : cards) {
@@ -80,12 +76,12 @@ public class JooqCreateGameHelper {
 
     var saved = insert.execute();
 
-    if (saved == 0) {
-      throw new RuntimeException("Deck " + table + " saving failed");
+    if (saved != cards.size()) {
+      throw new RuntimeException("Deck " + table + " creating failed");
     }
   }
 
-  public void createCities(Game game) {
+  public void saveCities(CitiesCollection cities, UUID gameId) {
     var insert =
         dsl.insertInto(
             CITIES,
@@ -98,13 +94,13 @@ public class JooqCreateGameHelper {
             CITIES.BLUE_DISEASE,
             CITIES.YELLOW_DISEASE);
 
-    for (var city : game.cities().asList()) {
+    for (var city : cities.asList()) {
       var cityDiseases = city.getDiseases();
 
       insert =
           insert.values(
               city.getId().value(),
-              game.getId().value(),
+              gameId,
               city.getName().name(),
               city.hasResearchStation(),
               cityDiseases.get(Disease.Color.BLACK),
@@ -116,41 +112,50 @@ public class JooqCreateGameHelper {
     var saved = insert.execute();
 
     if (saved == 0) {
-      throw new RuntimeException("Cities saving failed");
+      throw new RuntimeException("Cities creating failed");
     }
   }
 
-  public void createPlayers(Game game) {
+  public void savePlayers(List<Player> players, UUID gameId) {
     var turnOrder = 0;
 
-    for (var player : game.getPlayers()) {
-      var playerRecord = preparePlayerRecord(player, game, turnOrder);
+    for (var player : players) {
+      var playerRecord = preparePlayerRecord(player, gameId, turnOrder);
       var saved = dsl.insertInto(PLAYERS).set(playerRecord).execute();
 
-      for (var card : player.getCardsInHand()) {
-        dsl.insertInto(PLAYER_CARDS).set(preparePlayerCardRecord(card, player)).execute();
+      if (saved != 1) {
+        throw new RuntimeException("Player creating failed");
       }
 
-      if (saved != 1) {
-        throw new RuntimeException("Player saving failed");
-      }
+      savePlayerCards(player);
 
       turnOrder++;
     }
   }
 
-  private PlayerCardsRecord preparePlayerCardRecord(PlayerCard card, Player player) {
-    return new PlayerCardsRecord(card.getId().value(), player.getId().value(), card.getName());
+  private void savePlayerCards(Player player) {
+    var insert =
+        dsl.insertInto(PLAYER_CARDS, PLAYER_CARDS.ID, PLAYER_CARDS.PLAYER_ID, PLAYER_CARDS.NAME);
+
+    for (var card : player.getCardsInHand()) {
+      insert = insert.values(card.getId().value(), player.getId().value(), card.getName());
+    }
+
+    var savedCards = insert.execute();
+
+    if (savedCards != player.getCardsInHand().size()) {
+      throw new RuntimeException("Player card creating failed");
+    }
   }
 
-  private PlayersRecord preparePlayerRecord(Player player, Game game, int turnOrder) {
+  protected PlayersRecord preparePlayerRecord(Player player, UUID gameId, int turnOrder) {
     return new PlayersRecord(
         player.getId().value(),
-        game.getId().value(),
+        gameId,
         player.getRole().name(),
         player.getCurrentLocation().name(),
         player.getNumberOfAvailableActions(),
-        player.isHasSpecialActionUsed(),
+        player.hasSpecialActionUsed(),
         turnOrder);
   }
 }

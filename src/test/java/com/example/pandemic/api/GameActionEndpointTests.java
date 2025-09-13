@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GamePerformActionEndpointTests {
+public class GameActionEndpointTests {
 
   @Autowired private TestRestTemplate restTemplate;
 

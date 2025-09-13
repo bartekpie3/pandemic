@@ -70,8 +70,7 @@ public class GameTests {
 
   @Test
   public void shouldPerformFirstDrawStepWithSuccess() {
-    var game = GameBuilder.aGame().build();
-    game.goToDrawState();
+    var game = GameBuilder.aGame().onFirstDrawState().build();
 
     var result = game.performAction(new DrawStepAction());
 
@@ -83,6 +82,7 @@ public class GameTests {
   public void shouldFailPerformActionWhenAnyPlayerHasMoreThanSevenCardsInHandInFirstDrawState() {
     var game =
         GameBuilder.aGame()
+            .onFirstDrawState()
             .withPlayers(
                 List.of(
                     PlayerBuilder.aPlayer().build(),
@@ -100,7 +100,6 @@ public class GameTests {
                                 PlayerCard.createCityCard(City.Name.OSAKA)))
                         .build()))
             .build();
-    game.goToDrawState();
 
     var result = game.performAction(new DrawStepAction());
 
@@ -110,9 +109,7 @@ public class GameTests {
 
   @Test
   public void shouldPerformSecondDrawStepWithSuccess() {
-    var game = GameBuilder.aGame().build();
-    game.goToDrawState();
-    game.goToSecondDrawStepOrInfectStep();
+    var game = GameBuilder.aGame().onSecondDrawStep().build();
 
     var result = game.performAction(new DrawStepAction());
 
@@ -124,6 +121,7 @@ public class GameTests {
   public void shouldPerformSecondDrawStepWithSuccessEvenPlayerHasMoreThanSevenCardsInHand() {
     var game =
         GameBuilder.aGame()
+            .onSecondDrawStep()
             .withActivePlayer(
                 PlayerBuilder.aPlayer()
                     .withCardsInHand(
@@ -138,8 +136,6 @@ public class GameTests {
                             PlayerCard.createCityCard(City.Name.OSAKA)))
                     .build())
             .build();
-    game.goToDrawState();
-    game.goToSecondDrawStepOrInfectStep();
 
     var result = game.performAction(new DrawStepAction());
 
@@ -149,8 +145,7 @@ public class GameTests {
 
   @Test
   public void shouldPerformInfectStepWithSuccess() {
-    var game = GameBuilder.aGame().build();
-    game.goToSecondDrawStepOrInfectStep();
+    var game = GameBuilder.aGame().onInfectState().build();
 
     var result = game.performAction(new InfectStepAction());
 
@@ -164,6 +159,7 @@ public class GameTests {
   public void shouldFailPerformActionWhenAnyPlayerHasMoreThanSevenCardsInHandInInfectState() {
     var game =
         GameBuilder.aGame()
+            .onInfectState()
             .withActivePlayer(
                 PlayerBuilder.aPlayer()
                     .withCardsInHand(
@@ -178,7 +174,6 @@ public class GameTests {
                             PlayerCard.createCityCard(City.Name.OSAKA)))
                     .build())
             .build();
-    game.goToSecondDrawStepOrInfectStep();
 
     var result = game.performAction(new InfectStepAction());
 
@@ -188,8 +183,11 @@ public class GameTests {
 
   @Test
   public void shouldGoToFirstPlayerTurnWhenLastPlayerTurnEnd() {
-    var game = GameBuilder.aGame().build();
+    var game = GameBuilder.aGame().onInfectState().build();
     game.goToActionState();
+    game.goToDrawState();
+    game.goToSecondDrawStepOrInfectStep();
+    game.goToSecondDrawStepOrInfectStep();
     game.goToActionState();
 
     assertThat(game.getCurrentPlayerTurnIndex()).isEqualTo(0);

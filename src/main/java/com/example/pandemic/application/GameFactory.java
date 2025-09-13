@@ -10,14 +10,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
-@Service
-@Slf4j
-class CreateGameHelper {
+class GameFactory {
 
   private static final int INFECTION_CITIES_PER_TIER = 3;
   private static final int[] INFECTION_TIERS = {3, 2, 1};
@@ -83,7 +77,7 @@ class CreateGameHelper {
 
     playerDeck.shuffleEvenly(
         IntStream.rangeClosed(1, cardsNumber)
-            .mapToObj(i -> PlayerCard.createEpidemicCard())
+            .mapToObj(_ -> PlayerCard.createEpidemicCard())
             .collect(Collectors.toList()));
   }
 }

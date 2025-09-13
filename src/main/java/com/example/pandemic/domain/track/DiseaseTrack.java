@@ -47,7 +47,7 @@ public record DiseaseTrack(Map<Disease.Color, Disease> diseases) {
     return diseases.get(disease).isEradicated();
   }
 
-  public boolean areAllDiseaseCured() {
+  public boolean areAllDiseasesCured() {
     return diseases.values().stream().allMatch(Disease::isCured);
   }
 }

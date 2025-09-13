@@ -32,7 +32,7 @@ public final class PlayerActionHandlerProvider {
       return (ActionHandler<T>) new PassActionHandler();
     }
 
-    if (actionRequest instanceof OperationsExpertSpecialMoveActionHandler) {
+    if (actionRequest instanceof OperationsExpertSpecialMoveActionRequest) {
       return (ActionHandler<T>) new OperationsExpertSpecialMoveActionHandler();
     }
 

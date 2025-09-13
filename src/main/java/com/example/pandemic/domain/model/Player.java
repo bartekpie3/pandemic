@@ -25,7 +25,7 @@ public final class Player {
 
   @Getter private int numberOfAvailableActions;
 
-  @Getter private boolean hasSpecialActionUsed;
+  private boolean hasSpecialActionUsed;
 
   public Player(@NonNull Role role, City.@NonNull Name currentLocation) {
     this.id = Id.generate();
@@ -95,6 +95,10 @@ public final class Player {
   @Override
   public String toString() {
     return role.name();
+  }
+
+  public boolean hasSpecialActionUsed() {
+    return hasSpecialActionUsed;
   }
 
   @Override

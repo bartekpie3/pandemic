@@ -1,7 +1,7 @@
-package com.example.pandemic.infrastructure.mapper;
+package com.example.pandemic.infrastructure.repository.InMemory;
 
-import com.example.pandemic.application.query.DiseaseDto;
-import com.example.pandemic.application.query.GameDto;
+import com.example.pandemic.domain.dto.DiseaseDto;
+import com.example.pandemic.domain.dto.GameDto;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.model.Disease;
 import java.util.Map;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("dev")
-public class InMemoryQueryGameMapper {
+class InMemoryQueryGameMapper {
 
   public GameDto toDto(Game game) {
     return new GameDto(

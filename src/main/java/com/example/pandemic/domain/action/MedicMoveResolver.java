@@ -8,7 +8,7 @@ import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class MedicMoveResolver {
+final class MedicMoveResolver {
 
   private MedicMoveResolver() {}
 
@@ -23,7 +23,7 @@ class MedicMoveResolver {
         .filter(game::isDiseaseCured)
         .forEach(
             d -> {
-              destinationCity.treatDisease(d, City.MAX_DISEASE);
+              destinationCity.treatDisease(d, City.MAX_DISEASE_IN_CITY);
 
               log.info("Medic cure {} disease from {} where did he move", d, destinationCity);
 

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.GameRepository;
 import com.example.pandemic.domain.model.Player;
-import com.example.pandemic.infrastructure.repository.InMemoryGameRepository;
+import com.example.pandemic.infrastructure.repository.InMemory.InMemoryGameRepository;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 

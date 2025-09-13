@@ -1,9 +1,9 @@
 package com.example.pandemic.userinterface.http.game;
 
 import com.example.pandemic.application.GameQueryService;
-import com.example.pandemic.application.query.CityDto;
-import com.example.pandemic.application.query.GameDto;
-import com.example.pandemic.application.query.PlayerDto;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
 import com.example.pandemic.domain.Game;
 import java.util.List;
 import java.util.UUID;
