@@ -5,13 +5,10 @@ import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.action.request.ActionRequest;
 import com.example.pandemic.domain.action.request.DrawStepActionRequest;
 import com.example.pandemic.domain.card.CardDeck;
-import com.example.pandemic.domain.card.InfectionCard;
+import com.example.pandemic.domain.card.DeckHelper;
 import com.example.pandemic.domain.card.PlayerCard;
 import com.example.pandemic.domain.exception.InvalidActionRequest;
 import com.example.pandemic.domain.service.InfectCityFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -57,35 +54,18 @@ final class DrawStep implements GameStep {
 
     var infectionDeck = game.getInfectionDeck();
     var infectionDiscardPile = game.getInfectionDiscardPile();
-
     var drawnInfectionCityCard = infectionDeck.drawBottomCard();
 
-    InfectCityFactory.createInfector().infect(game, drawnInfectionCityCard);
+    var infector = InfectCityFactory.createInfector();
+    infector.infect(game, drawnInfectionCityCard);
 
     infectionDiscardPile.addCard(drawnInfectionCityCard);
-    shuffleDiscardPileOnTopOfTheDeck(infectionDeck, infectionDiscardPile);
-  }
 
-  private void shuffleDiscardPileOnTopOfTheDeck(
-      CardDeck<InfectionCard> infectionDeck, CardDeck<InfectionCard> infectionDiscardPile) {
-    var cards = new ArrayList<InfectionCard>(infectionDiscardPile.size());
-
-    for (var i = 0; i <= infectionDiscardPile.size(); i++) {
-      cards.add(infectionDiscardPile.drawCard());
-    }
-
-    Collections.shuffle(cards);
-
-    cards.forEach(infectionDeck::addCard);
+    DeckHelper.shuffleGivenDeckOnTopOfTheDeck(infectionDeck, infectionDiscardPile);
   }
 
   @Override
   public void moveToNextStep(Game game) {
     game.goToSecondDrawStepOrInfectStep();
-  }
-
-  @Override
-  public boolean canMoveToNextStep(Game game) {
-    return true;
   }
 }

@@ -24,7 +24,7 @@ class ImplGameCommandService implements GameCommandService {
   @Transactional
   @Override
   public Game.Id createGame(@NonNull GameMode gameMode, @NonNull Set<Player.Role> playersRole) {
-    var game = new CreateGameHelper().create(gameMode, playersRole);
+    var game = GameFactory.create(gameMode, playersRole);
 
     gameRepository.create(game);
 
@@ -60,7 +60,7 @@ class ImplGameCommandService implements GameCommandService {
 
     player.discardCard(card);
 
-    gameRepository.save(game);
+    gameRepository.savePlayer(player);
 
     log.info("Player {} discarded card {}", player, card);
 

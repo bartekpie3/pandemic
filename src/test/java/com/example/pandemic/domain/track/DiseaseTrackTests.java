@@ -46,7 +46,7 @@ public class DiseaseTrackTests {
     track.cureDisease(Disease.Color.BLUE);
     track.cureDisease(Disease.Color.YELLOW);
 
-    var areAllDiseaseCured = track.areAllDiseaseCured();
+    var areAllDiseaseCured = track.areAllDiseasesCured();
 
     assertThat(areAllDiseaseCured).isTrue();
   }
@@ -57,7 +57,7 @@ public class DiseaseTrackTests {
 
     track.cureDisease(Disease.Color.RED);
 
-    var areAllDiseaseCured = track.areAllDiseaseCured();
+    var areAllDiseaseCured = track.areAllDiseasesCured();
 
     assertThat(areAllDiseaseCured).isFalse();
   }

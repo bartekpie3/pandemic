@@ -16,7 +16,7 @@ public final class City {
 
   public static final Name STARTING_CITY_NAME = Name.ATLANTA;
 
-  public static final int MAX_DISEASE = 3;
+  public static final int MAX_DISEASE_IN_CITY = 3;
 
   @Getter private final Id id;
 
@@ -77,9 +77,9 @@ public final class City {
   public boolean addDisease(@NonNull Disease.Color disease, int infected) {
     var currentValue = diseases.get(disease);
     var newValue = currentValue + infected;
-    var isOutbreak = newValue > MAX_DISEASE;
+    var isOutbreak = newValue > MAX_DISEASE_IN_CITY;
 
-    diseases.put(disease, Math.min(newValue, MAX_DISEASE));
+    diseases.put(disease, Math.min(newValue, MAX_DISEASE_IN_CITY));
 
     return isOutbreak;
   }

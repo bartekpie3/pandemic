@@ -1,6 +1,8 @@
 package com.example.pandemic.domain.model;
 
 import com.example.pandemic.domain.exception.DiseaseAlreadyIsCured;
+import com.example.pandemic.domain.exception.DiseaseAlreadyIsEradicated;
+import com.example.pandemic.domain.exception.DiseaseIsNotCured;
 import lombok.Getter;
 
 public final class Disease {
@@ -24,6 +26,14 @@ public final class Disease {
   }
 
   public void eradicate() {
+    if (!isCured) {
+      throw new DiseaseIsNotCured("Disease is not cured");
+    }
+
+    if (isEradicated) {
+        throw new DiseaseAlreadyIsEradicated("Disease is already eradicated");
+    }
+
     isEradicated = true;
   }
 

@@ -26,13 +26,13 @@ final class DiscoverCureActionHandler implements ActionHandler<DiscoverClueActio
       return validationResult;
     }
 
-    var disease = specifyDisease(cardsUsed);
+    var disease = getDiseaseColorFromCards(cardsUsed);
 
     game.discoverCure(disease);
     playerDiscardCards(activePlayer, cardsUsed);
     activePlayer.takeAction();
 
-    log.info("Player {} discover cure for {}", game.getActivePlayer(), disease);
+    log.info("Player {} discovered cure for {}", game.getActivePlayer(), disease);
 
     treatDiseaseAtMedicLocation(game, disease);
     checkAndEradicateDisease(game, disease);
@@ -48,11 +48,12 @@ final class DiscoverCureActionHandler implements ActionHandler<DiscoverClueActio
         });
   }
 
+  // Rule: Medic automatically removes all cubes of a cured disease from their city
   private void treatDiseaseAtMedicLocation(Game game, Disease.Color disease) {
     game.findPlayer(Player.Role.MEDIC)
         .map(
             p -> {
-              game.cities().get(p.getCurrentLocation()).treatDisease(disease, City.MAX_DISEASE);
+              game.cities().get(p.getCurrentLocation()).treatDisease(disease, City.MAX_DISEASE_IN_CITY);
               return p;
             })
         .ifPresent(
@@ -71,7 +72,7 @@ final class DiscoverCureActionHandler implements ActionHandler<DiscoverClueActio
     }
   }
 
-  private Disease.Color specifyDisease(Set<City.Name> cardsUsed) {
+  private Disease.Color getDiseaseColorFromCards(Set<City.Name> cardsUsed) {
     return cardsUsed.iterator().next().getColor();
   }
 

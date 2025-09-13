@@ -11,7 +11,7 @@ public abstract class Card {
 
   @Getter @NonNull protected final Id id;
 
-  @NonNull @Getter protected final String name;
+  @Getter @NonNull protected final String name;
 
   protected Card(@NonNull String name) {
     this.id = Id.generate();

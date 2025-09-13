@@ -1,4 +1,4 @@
-package com.example.pandemic.infrastructure.mapper;
+package com.example.pandemic.infrastructure.repository.Jooq;
 
 import com.example.jooq.generated.tables.records.CitiesRecord;
 import com.example.jooq.generated.tables.records.GameRecord;
@@ -9,10 +9,10 @@ import com.example.jooq.generated.tables.records.PlayerDeckCardsRecord;
 import com.example.jooq.generated.tables.records.PlayersRecord;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.card.Card;
-import com.example.pandemic.domain.card.CardDeck;
 import com.example.pandemic.domain.card.InfectionCard;
 import com.example.pandemic.domain.card.PlayerCard;
 import com.example.pandemic.domain.collection.Cities;
+import com.example.pandemic.domain.collection.CitiesCollection;
 import com.example.pandemic.domain.model.City;
 import com.example.pandemic.domain.model.Disease;
 import com.example.pandemic.domain.model.Player;
@@ -22,6 +22,9 @@ import com.example.pandemic.domain.track.OutbreakTrack;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.jooq.Record;
 import org.jooq.Record1;
 import org.jooq.Record2;
 import org.jooq.Result;
@@ -30,7 +33,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("prod")
-public class JooqGameMapper {
+class JooqGameMapper {
+
   public Game map(
       GameRecord gameRecord,
       Result<CitiesRecord> cities,
@@ -53,33 +57,34 @@ public class JooqGameMapper {
         gameRecord.getCurrentPlayerTurn());
   }
 
-  private CardDeck<InfectionCard> mapInfectionDiscardPile(
+  private JooqCardDeck<InfectionCard> mapInfectionDiscardPile(
       Result<InfectionDiscardPileCardsRecord> infectionDiscardPile) {
-    return new JooqCardDeck<>(
-        infectionDiscardPile.stream()
-            .map(r -> new InfectionCard(Card.Id.from(r.getId()), r.getName()))
-            .toList());
+    return mapDeck(
+        infectionDiscardPile, r -> new InfectionCard(Card.Id.from(r.getId()), r.getName()));
   }
 
-  private CardDeck<InfectionCard> mapInfectionDeck(Result<InfectionDeckCardsRecord> infectionDeck) {
-    return new JooqCardDeck<>(
-        infectionDeck.stream()
-            .map(r -> new InfectionCard(Card.Id.from(r.getId()), r.getName()))
-            .toList());
+  private JooqCardDeck<InfectionCard> mapInfectionDeck(
+      Result<InfectionDeckCardsRecord> infectionDeck) {
+    return mapDeck(infectionDeck, r -> new InfectionCard(Card.Id.from(r.getId()), r.getName()));
   }
 
-  private CardDeck<PlayerCard> mapPlayerDiscardPile() {
+  private JooqCardDeck<PlayerCard> mapPlayerDeck(Result<PlayerDeckCardsRecord> playerDeck) {
+    return mapDeck(playerDeck, r -> new PlayerCard(Card.Id.from(r.getId()), r.getName()));
+  }
+
+  private JooqCardDeck<PlayerCard> mapPlayerDiscardPile() {
+    // todo
+
     return new JooqCardDeck<>(new ArrayList<>());
   }
 
-  private CardDeck<PlayerCard> mapPlayerDeck(Result<PlayerDeckCardsRecord> playerDeck) {
+  private <R extends Record, C extends Card> JooqCardDeck<C> mapDeck(
+      Result<R> cards, Function<R, C> mapper) {
     return new JooqCardDeck<>(
-        playerDeck.stream()
-            .map(r -> new PlayerCard(Card.Id.from(r.getId()), r.getName()))
-            .toList());
+        cards.stream().map(mapper).collect(Collectors.toCollection(ArrayList::new)));
   }
 
-  private Cities mapCities(Result<CitiesRecord> cities) {
+  private CitiesCollection mapCities(Result<CitiesRecord> cities) {
     var citiesMap = new EnumMap<City.Name, City>(City.Name.class);
 
     for (CitiesRecord cityRecord : cities) {
@@ -98,7 +103,7 @@ public class JooqGameMapper {
               cityRecord.getHasResearchStation()));
     }
 
-    return new Cities(citiesMap);
+    return new JooqCitiesDecorator(new Cities(citiesMap));
   }
 
   private DiseaseTrack prepareDiseaseTrack(GameRecord gameRecord) {
@@ -161,6 +166,6 @@ public class JooqGameMapper {
               PlayerCardsRecord c = cardRecord.value1();
               return new PlayerCard(Card.Id.from(c.getId()), c.getName());
             })
-        .toList();
+        .collect(Collectors.toList());
   }
 }

@@ -24,6 +24,7 @@ public class GameBuilder {
   private CardDeck<PlayerCard> playerDeck = MemoryCardDeck.initPlayerDeck();
   private CardDeck<InfectionCard> infectionDeck = MemoryCardDeck.initInfectionDeck();
   private CardDeck<InfectionCard> infectionDiscardPile = MemoryCardDeck.init();
+  private Game.State state = Game.State.ACTION;
 
   private GameBuilder() {
     players = new ArrayList<>();
@@ -92,6 +93,24 @@ public class GameBuilder {
     return this;
   }
 
+  public GameBuilder onFirstDrawState() {
+    this.state = Game.State.FIRST_DRAW;
+
+    return this;
+  }
+
+  public GameBuilder onInfectState() {
+    this.state = Game.State.INFECT;
+
+    return this;
+  }
+
+  public GameBuilder onSecondDrawStep() {
+    this.state = Game.State.SECOND_DRAW;
+
+    return this;
+  }
+
   public Game build() {
     players.getFirst().resetAvailableActions();
 
@@ -106,7 +125,7 @@ public class GameBuilder {
         MemoryCardDeck.init(),
         infectionDeck,
         infectionDiscardPile,
-        Game.State.ACTION,
+        state,
         0);
   }
 }

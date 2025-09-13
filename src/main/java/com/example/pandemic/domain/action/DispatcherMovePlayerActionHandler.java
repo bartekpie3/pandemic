@@ -8,7 +8,7 @@ import com.example.pandemic.domain.model.Player;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class DispatcherMovePlayerActionHandler
+final class DispatcherMovePlayerActionHandler
     implements ActionHandler<DispatcherMovePlayerActionRequest> {
 
   @Override
@@ -33,6 +33,7 @@ class DispatcherMovePlayerActionHandler
     playerWhichMoves.setCurrentLocation(desinationCity.getName());
     activePlayer.takeAction();
 
+    // Rule: Medic automatically removes all cubes of a cured disease from their city
     MedicMoveResolver.medicClearCuredDiseaseOnEnter(playerWhichMoves, game);
 
     log.info(

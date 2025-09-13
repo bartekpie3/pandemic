@@ -10,19 +10,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
-@Service
-@Slf4j
-class CreateGameHelper {
+class GameFactory {
 
   private static final int INFECTION_CITIES_PER_TIER = 3;
   private static final int[] INFECTION_TIERS = {3, 2, 1};
 
-  public Game create(@NonNull GameMode gameMode, @NonNull Set<Player.Role> playersRole) {
+  private GameFactory() {}
+
+  public static Game create(@NonNull GameMode gameMode, @NonNull Set<Player.Role> playersRole) {
     var cities = Cities.init();
     var players = createPlayers(playersRole);
     var playerDeck = MemoryCardDeck.initPlayerDeck();
@@ -35,11 +31,11 @@ class CreateGameHelper {
     return Game.create(players, cities, playerDeck, infectionDeck, infectionDiscardedPile);
   }
 
-  private List<Player> createPlayers(Set<Player.Role> playersRole) {
+  private static List<Player> createPlayers(Set<Player.Role> playersRole) {
     return playersRole.stream().map(r -> new Player(r, City.STARTING_CITY_NAME)).toList();
   }
 
-  private void playersGetInitialHand(List<Player> players, CardDeck<PlayerCard> playerDeck) {
+  private static void playersGetInitialHand(List<Player> players, CardDeck<PlayerCard> playerDeck) {
     var initialHandSize =
         switch (players.size()) {
           case 2 -> 4;
@@ -58,7 +54,7 @@ class CreateGameHelper {
     }
   }
 
-  private MemoryCardDeck<InfectionCard> infectCities(
+  private static MemoryCardDeck<InfectionCard> infectCities(
       Cities cities, CardDeck<InfectionCard> infectionDeck) {
     MemoryCardDeck<InfectionCard> infectionDiscardedPile = MemoryCardDeck.init();
 
@@ -73,7 +69,7 @@ class CreateGameHelper {
     return infectionDiscardedPile;
   }
 
-  private void shuffleEpidemicCards(MemoryCardDeck<PlayerCard> playerDeck, GameMode gameMode) {
+  private static void shuffleEpidemicCards(MemoryCardDeck<PlayerCard> playerDeck, GameMode gameMode) {
     var cardsNumber =
         switch (gameMode) {
           case EASY -> 4;
@@ -83,7 +79,7 @@ class CreateGameHelper {
 
     playerDeck.shuffleEvenly(
         IntStream.rangeClosed(1, cardsNumber)
-            .mapToObj(i -> PlayerCard.createEpidemicCard())
+            .mapToObj(_ -> PlayerCard.createEpidemicCard())
             .collect(Collectors.toList()));
   }
 }

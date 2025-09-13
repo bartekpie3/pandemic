@@ -1,4 +1,4 @@
-package com.example.pandemic.application.query;
+package com.example.pandemic.domain.dto;
 
 import com.example.pandemic.domain.model.Disease;
 import java.util.Map;

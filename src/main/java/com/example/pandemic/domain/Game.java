@@ -8,6 +8,7 @@ import com.example.pandemic.domain.card.InfectionCard;
 import com.example.pandemic.domain.card.MemoryCardDeck;
 import com.example.pandemic.domain.card.PlayerCard;
 import com.example.pandemic.domain.collection.Cities;
+import com.example.pandemic.domain.collection.CitiesCollection;
 import com.example.pandemic.domain.exception.InvalidNumberOfPlayers;
 import com.example.pandemic.domain.exception.InvalidPlayer;
 import com.example.pandemic.domain.model.Disease;
@@ -29,8 +30,10 @@ import lombok.experimental.Delegate;
 @AllArgsConstructor
 public final class Game {
 
+  private static final int PLAYER_HAND_LIMIT = 7;
   private static final int MIN_PLAYER_COUNT = 2;
   private static final int MAX_PLAYER_COUNT = 4;
+
   @NonNull @Getter private final Id id;
   @Getter @NonNull private final InfectionRateTrack infectionRateTrack;
   @Getter @NonNull private final OutbreakTrack outbreakTrack;
@@ -40,7 +43,7 @@ public final class Game {
   @NonNull
   @Getter
   @Accessors(fluent = true)
-  private final Cities cities;
+  private final CitiesCollection cities;
 
   @NonNull @Getter private final CardDeck<PlayerCard> playerDeck;
   @NonNull @Getter private final CardDeck<PlayerCard> playerDiscardPile;
@@ -85,6 +88,10 @@ public final class Game {
 
     var result = gameStep.executeAction(this, actionRequest);
 
+    if (!result.isSuccess()) {
+      return result;
+    }
+
     if (gameStep.canMoveToNextStep(this)) {
       gameStep.moveToNextStep(this);
     }
@@ -95,7 +102,7 @@ public final class Game {
   public void discoverCure(Disease.Color disease) {
     diseaseTrack.cureDisease(disease);
 
-    if (diseaseTrack.areAllDiseaseCured()) {
+    if (diseaseTrack.areAllDiseasesCured()) {
       win();
     }
   }
@@ -111,14 +118,26 @@ public final class Game {
       return;
     }
 
+    if (!state.equals(State.SECOND_DRAW)) {
+      throw new IllegalStateException("Game is not in second draw state to move to infect state");
+    }
+
     state = State.INFECT;
   }
 
   public void goToDrawState() {
+    if (!state.equals(State.ACTION)) {
+      throw new IllegalStateException("Game is not in action state to move to first draw state");
+    }
+
     state = State.FIRST_DRAW;
   }
 
   public void goToActionState() {
+    if (!state.equals(State.INFECT)) {
+      throw new IllegalStateException("Game is not in infect state to move to action state");
+    }
+
     state = State.ACTION;
 
     goToNextPlayer();
@@ -171,7 +190,7 @@ public final class Game {
   }
 
   public boolean isFirstDraw() {
-    return state == State.FIRST_DRAW;
+    return state.equals(State.FIRST_DRAW);
   }
 
   private boolean checkAnyPlayerShouldDiscardCardsToSevenOnHand() {
@@ -179,7 +198,7 @@ public final class Game {
       return false;
     }
 
-    return players.stream().anyMatch(player -> player.getNumberOfCardsInHand() > 7);
+    return players.stream().anyMatch(player -> player.getNumberOfCardsInHand() > PLAYER_HAND_LIMIT);
   }
 
   public Optional<Player> findPlayer(Player.Role role) {

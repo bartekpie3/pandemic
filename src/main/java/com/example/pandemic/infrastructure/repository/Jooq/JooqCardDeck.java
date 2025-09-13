@@ -1,4 +1,4 @@
-package com.example.pandemic.infrastructure.mapper;
+package com.example.pandemic.infrastructure.repository.Jooq;
 
 import com.example.pandemic.domain.card.Card;
 import com.example.pandemic.domain.card.CardDeck;
@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
-public class JooqCardDeck<T extends Card> implements CardDeck<T> {
+/**
+ * Implementation of CardDeck using Jooq. To store which cards was removed and which was added,
+ * to make less queries to database after save game.
+ */
+class JooqCardDeck<T extends Card> implements CardDeck<T> {
 
   private final List<T> cards;
   @Getter private final List<T> removedCards = new ArrayList<>();

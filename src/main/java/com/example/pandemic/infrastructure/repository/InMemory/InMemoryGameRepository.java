@@ -1,8 +1,9 @@
-package com.example.pandemic.infrastructure.repository;
+package com.example.pandemic.infrastructure.repository.InMemory;
 
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.GameRepository;
 import com.example.pandemic.domain.exception.GameNotFound;
+import com.example.pandemic.domain.model.Player;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +25,9 @@ public class InMemoryGameRepository implements GameRepository {
   public void save(Game game) {
     games.put(game.getId(), game);
   }
+
+  @Override
+  public void savePlayer(Player player) {}
 
   @Override
   public Game get(Game.Id gameId) {
