@@ -4,28 +4,25 @@ import static com.example.jooq.generated.tables.Cities.CITIES;
 import static com.example.jooq.generated.tables.Game.GAME;
 import static com.example.jooq.generated.tables.InfectionDeckCards.INFECTION_DECK_CARDS;
 import static com.example.jooq.generated.tables.InfectionDiscardPileCards.INFECTION_DISCARD_PILE_CARDS;
-import static com.example.jooq.generated.tables.PlayerCards.PLAYER_CARDS;
 import static com.example.jooq.generated.tables.PlayerDeckCards.PLAYER_DECK_CARDS;
 import static com.example.jooq.generated.tables.Players.PLAYERS;
+import static org.jooq.impl.DSL.multiset;
+import static org.jooq.impl.DSL.select;
 
+import com.example.jooq.generated.Tables;
 import com.example.jooq.generated.tables.records.GameRecord;
 import com.example.jooq.generated.tables.records.PlayerCardsRecord;
-import com.example.jooq.generated.tables.records.PlayersRecord;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.GameRepository;
-import com.example.pandemic.domain.card.Card;
-import com.example.pandemic.domain.card.PlayerCard;
+import com.example.pandemic.domain.exception.GameNotFound;
 import com.example.pandemic.domain.model.Disease;
-import com.example.pandemic.domain.model.Player;
 import com.example.pandemic.infrastructure.mapper.JooqGameMapper;
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Table;
-import org.jooq.TableField;
+import org.jooq.Field;
+import org.jooq.Record1;
+import org.jooq.Result;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -49,69 +46,13 @@ public class JooqGameRepository implements GameRepository {
       throw new RuntimeException("Game creation failed");
     }
 
-    saveCities(game);
-    savePlayers(game);
-    savePlayerDeck(game);
-    saveInfectionDeck(game);
-    saveInfectionDiscardPile(game);
-  }
+    var createGameHelper = new JooqCreateGameHelper(dsl);
 
-  private <T extends Record> void saveDeck(
-      Table<T> table,
-      TableField<T, UUID> idField,
-      TableField<T, String> nameField,
-      TableField<T, UUID> gameIdField,
-      TableField<T, Integer> orderField,
-      List<Card> cards,
-      UUID gameId) {
-    var insert = dsl.insertInto(table, idField, nameField, gameIdField, orderField);
-
-    var deckOrder = 0;
-
-    for (var card : cards) {
-      insert = insert.values(card.getId().value(), card.getName(), gameId, deckOrder);
-
-      deckOrder++;
-    }
-
-    var saved = insert.execute();
-
-    if (saved == 0) {
-      throw new RuntimeException("Deck " + table + " saving failed");
-    }
-  }
-
-  private void saveInfectionDiscardPile(Game game) {
-    saveDeck(
-        INFECTION_DISCARD_PILE_CARDS,
-        INFECTION_DISCARD_PILE_CARDS.ID,
-        INFECTION_DISCARD_PILE_CARDS.NAME,
-        INFECTION_DISCARD_PILE_CARDS.GAME_ID,
-        INFECTION_DISCARD_PILE_CARDS.DECK_ORDER,
-        game.getInfectionDiscardPile().getCards(),
-        game.getId().value());
-  }
-
-  private void saveInfectionDeck(Game game) {
-    saveDeck(
-        INFECTION_DECK_CARDS,
-        INFECTION_DECK_CARDS.ID,
-        INFECTION_DECK_CARDS.NAME,
-        INFECTION_DECK_CARDS.GAME_ID,
-        INFECTION_DECK_CARDS.DECK_ORDER,
-        game.getInfectionDeck().getCards(),
-        game.getId().value());
-  }
-
-  private void savePlayerDeck(Game game) {
-    saveDeck(
-        PLAYER_DECK_CARDS,
-        PLAYER_DECK_CARDS.ID,
-        PLAYER_DECK_CARDS.NAME,
-        PLAYER_DECK_CARDS.GAME_ID,
-        PLAYER_DECK_CARDS.DECK_ORDER,
-        game.getPlayerDeck().getCards(),
-        game.getId().value());
+    createGameHelper.createCities(game);
+    createGameHelper.createPlayers(game);
+    createGameHelper.createPlayerDeck(game);
+    createGameHelper.createInfectionDeck(game);
+    createGameHelper.createInfectionDiscardPile(game);
   }
 
   private GameRecord prepareGameRecordToSave(Game game) {
@@ -140,80 +81,55 @@ public class JooqGameRepository implements GameRepository {
     return gameRecord;
   }
 
-  private void saveCities(Game game) {
-    var insert =
-        dsl.insertInto(
-            CITIES,
-            CITIES.ID,
-            CITIES.GAME_ID,
-            CITIES.NAME,
-            CITIES.HAS_RESEARCH_STATION,
-            CITIES.BLACK_DISEASE,
-            CITIES.RED_DISEASE,
-            CITIES.BLUE_DISEASE,
-            CITIES.YELLOW_DISEASE);
-
-    for (var city : game.cities().asList()) {
-      var cityDiseases = city.getDiseases();
-
-      insert =
-          insert.values(
-              city.getId().value(),
-              game.getId().value(),
-              city.getName().name(),
-              city.hasResearchStation(),
-              cityDiseases.get(Disease.Color.BLACK),
-              cityDiseases.get(Disease.Color.RED),
-              cityDiseases.get(Disease.Color.BLUE),
-              cityDiseases.get(Disease.Color.YELLOW));
-    }
-
-    var saved = insert.execute();
-
-    if (saved == 0) {
-      throw new RuntimeException("Cities saving failed");
-    }
-  }
-
-  private void savePlayers(Game game) {
-    var turnOrder = 0;
-
-    for (var player : game.getPlayers()) {
-      var playerRecord = preparePlayerRecord(player, game, turnOrder);
-      var saved = dsl.insertInto(PLAYERS).set(playerRecord).execute();
-
-      for (var card : player.getCardsInHand()) {
-        dsl.insertInto(PLAYER_CARDS).set(preparePlayerCardRecord(card, player)).execute();
-      }
-
-      if (saved != 1) {
-        throw new RuntimeException("Player saving failed");
-      }
-
-      turnOrder++;
-    }
-  }
-
-  private PlayerCardsRecord preparePlayerCardRecord(PlayerCard card, Player player) {
-    return new PlayerCardsRecord(card.getId().value(), player.getId().value(), card.getName());
-  }
-
-  private PlayersRecord preparePlayerRecord(Player player, Game game, int turnOrder) {
-    return new PlayersRecord(
-        player.getId().value(),
-        game.getId().value(),
-        player.getRole().name(),
-        player.getCurrentLocation().name(),
-        player.getNumberOfAvailableActions(),
-        player.isHasSpecialActionUsed(),
-        turnOrder);
-  }
-
   @Override
-  public void save(Game game) {}
+  public void save(Game game) {
+    var gameRecord = prepareGameRecordToSave(game);
+
+    var saved = dsl.update(GAME).set(gameRecord).where(GAME.ID.eq(game.getId().value())).execute();
+
+    if (saved != 1) {
+      throw new RuntimeException("Game saving failed");
+    }
+  }
 
   @Override
   public Game get(Game.Id gameId) {
-    return null;
+    var gameRecord =
+        dsl.selectFrom(GAME)
+            .where(GAME.ID.eq(gameId.value()))
+            .fetchOptional()
+            .orElseThrow(() -> new GameNotFound("Game not found: " + gameId));
+
+    var cities = dsl.selectFrom(CITIES).where(CITIES.GAME_ID.eq(gameId.value())).fetch();
+    var players =
+        dsl.select(PLAYERS, playerCards())
+            .from(PLAYERS)
+            .where(PLAYERS.GAME_ID.eq(gameId.value()))
+            .orderBy(PLAYERS.TURN_ORDER.asc())
+            .fetch();
+    var playerDeck =
+        dsl.selectFrom(PLAYER_DECK_CARDS)
+            .where(PLAYER_DECK_CARDS.GAME_ID.eq(gameId.value()))
+            .orderBy(PLAYER_DECK_CARDS.DECK_ORDER.asc())
+            .fetch();
+    var infectionDeck =
+        dsl.selectFrom(INFECTION_DECK_CARDS)
+            .where(INFECTION_DECK_CARDS.GAME_ID.eq(gameId.value()))
+            .orderBy(INFECTION_DECK_CARDS.DECK_ORDER.asc())
+            .fetch();
+    var infectionDiscardPile =
+        dsl.selectFrom(INFECTION_DISCARD_PILE_CARDS)
+            .where(INFECTION_DISCARD_PILE_CARDS.GAME_ID.eq(gameId.value()))
+            .orderBy(INFECTION_DISCARD_PILE_CARDS.DECK_ORDER.asc())
+            .fetch();
+
+    return mapper.map(gameRecord, cities, players, playerDeck, infectionDeck, infectionDiscardPile);
+  }
+
+  private Field<Result<Record1<PlayerCardsRecord>>> playerCards() {
+    return multiset(
+        select(Tables.PLAYER_CARDS)
+            .from(Tables.PLAYER_CARDS)
+            .where(Tables.PLAYER_CARDS.PLAYER_ID.eq(Tables.PLAYERS.ID)));
   }
 }

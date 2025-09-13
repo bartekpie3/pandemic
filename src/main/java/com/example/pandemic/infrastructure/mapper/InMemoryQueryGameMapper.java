@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Profile("dev")
-public class InMemoryGameMapper {
+public class InMemoryQueryGameMapper {
 
   public GameDto toDto(Game game) {
     return new GameDto(

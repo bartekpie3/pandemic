@@ -11,11 +11,9 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
-@RequiredArgsConstructor
 public final class Player {
 
   private static final int MAX_AVAILABLE_ACTIONS = 4;
@@ -124,6 +122,10 @@ public final class Player {
   public record Id(UUID value) implements BaseId {
     public static Id generate() {
       return new Id(UUID.randomUUID());
+    }
+
+    public static Id from(UUID id) {
+      return new Id(id);
     }
   }
 }

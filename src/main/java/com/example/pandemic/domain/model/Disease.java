@@ -7,12 +7,20 @@ public final class Disease {
 
   private final Color color;
 
-  @Getter private boolean isEradicated = false;
+  @Getter private boolean isEradicated;
 
-  @Getter private boolean isCured = false;
+  @Getter private boolean isCured;
 
   public Disease(Color color) {
     this.color = color;
+    this.isCured = false;
+    this.isEradicated = false;
+  }
+
+  public Disease(Color color, boolean isCured, boolean isEradicated) {
+    this.color = color;
+    this.isCured = isCured;
+    this.isEradicated = isEradicated;
   }
 
   public void eradicate() {

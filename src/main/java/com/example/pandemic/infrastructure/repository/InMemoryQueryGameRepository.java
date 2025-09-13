@@ -9,7 +9,7 @@ import com.example.pandemic.application.query.QueryGameRepository;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.GameRepository;
 import com.example.pandemic.domain.card.Card;
-import com.example.pandemic.infrastructure.mapper.InMemoryGameMapper;
+import com.example.pandemic.infrastructure.mapper.InMemoryQueryGameMapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class InMemoryQueryGameRepository implements QueryGameRepository {
 
   private final GameRepository gameRepository;
 
-  private final InMemoryGameMapper mapper;
+  private final InMemoryQueryGameMapper mapper;
 
   @Override
   public GameDto get(Game.@NonNull Id gameId) {

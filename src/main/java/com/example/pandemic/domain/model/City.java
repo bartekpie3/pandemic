@@ -190,5 +190,9 @@ public final class City {
     public static Id generate() {
       return new Id(UUID.randomUUID());
     }
+
+    public static Id from(UUID id) {
+      return new Id(id);
+    }
   }
 }

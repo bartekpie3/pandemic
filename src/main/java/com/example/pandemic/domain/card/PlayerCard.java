@@ -11,6 +11,10 @@ public class PlayerCard extends Card {
     super(cardName);
   }
 
+  public PlayerCard(Card.Id id, String cardName) {
+    super(id, cardName);
+  }
+
   public static PlayerCard createEpidemicCard() {
     return new PlayerCard(EPIDEMIC_CARD_NAME);
   }

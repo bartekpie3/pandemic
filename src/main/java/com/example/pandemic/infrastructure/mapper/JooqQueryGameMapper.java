@@ -32,7 +32,7 @@ public class JooqQueryGameMapper {
   }
 
   private Map<Disease.Color, DiseaseDto> prepareDiseases(GameRecord gameRecord) {
-    EnumMap<Disease.Color, DiseaseDto> diseases = new EnumMap<>(Disease.Color.class);
+    var diseases = new EnumMap<Disease.Color, DiseaseDto>(Disease.Color.class);
     diseases.put(
         Disease.Color.YELLOW,
         new DiseaseDto(

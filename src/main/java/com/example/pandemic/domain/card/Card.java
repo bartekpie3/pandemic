@@ -18,6 +18,11 @@ public abstract class Card {
     this.name = name;
   }
 
+  protected Card(@NonNull Card.Id id, @NonNull String name) {
+    this.id = id;
+    this.name = name;
+  }
+
   public boolean isCityCard(City.@NonNull Name cityName) {
     return cityName.name().equals(name);
   }
@@ -42,6 +47,10 @@ public abstract class Card {
   public record Id(@NonNull UUID value) implements BaseId {
     public static Id generate() {
       return new Id(UUID.randomUUID());
+    }
+
+    public static Id from(UUID id) {
+      return new Id(id);
     }
   }
 }

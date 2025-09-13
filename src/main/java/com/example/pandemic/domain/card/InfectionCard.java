@@ -10,6 +10,10 @@ public final class InfectionCard extends Card {
     super(cityName.name());
   }
 
+  public InfectionCard(Card.@NonNull Id id, String cardName) {
+    super(id, cardName);
+  }
+
   public City.Name getCityName() {
     return City.Name.valueOf(name);
   }
