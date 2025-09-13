@@ -1,15 +1,14 @@
-package com.example.pandemic.infrastructure.repository;
+package com.example.pandemic.infrastructure.repository.InMemory;
 
 import static com.example.pandemic.domain.model.Disease.Color.*;
 
-import com.example.pandemic.application.query.CityDto;
-import com.example.pandemic.application.query.GameDto;
-import com.example.pandemic.application.query.PlayerDto;
-import com.example.pandemic.application.query.QueryGameRepository;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
+import com.example.pandemic.domain.QueryGameRepository;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.GameRepository;
 import com.example.pandemic.domain.card.Card;
-import com.example.pandemic.infrastructure.mapper.InMemoryQueryGameMapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Profile("dev")
 @Repository
 @RequiredArgsConstructor
-public class InMemoryQueryGameRepository implements QueryGameRepository {
+class InMemoryQueryGameRepository implements QueryGameRepository {
 
   private final GameRepository gameRepository;
 
@@ -53,7 +52,7 @@ public class InMemoryQueryGameRepository implements QueryGameRepository {
   public List<CityDto> getCities(Game.@NonNull Id gameId) {
     var game = gameRepository.get(gameId);
 
-    return game.cities().stream()
+    return game.cities().asList().stream()
         .map(
             c -> {
               var cityDiseases = c.getDiseases();

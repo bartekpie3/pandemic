@@ -10,5 +10,7 @@ public interface GameStep {
 
   void moveToNextStep(Game game);
 
-  boolean canMoveToNextStep(Game game);
+  default boolean canMoveToNextStep(Game game) {
+    return true;
+  }
 }

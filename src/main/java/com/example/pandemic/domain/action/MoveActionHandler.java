@@ -25,6 +25,7 @@ final class MoveActionHandler implements ActionHandler<MoveActionRequest> {
     activePlayer.setCurrentLocation(desinationCity.getName());
     activePlayer.takeAction();
 
+    // Rule: Medic automatically removes all cubes of a cured disease from their city
     MedicMoveResolver.medicClearCuredDiseaseOnEnter(activePlayer, game);
 
     log.info(

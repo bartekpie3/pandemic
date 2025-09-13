@@ -34,7 +34,7 @@ public class OperationsExpertSpecialMoveActionHandlerTests {
     assertThat(game.getActivePlayer().getNumberOfAvailableActions()).isEqualTo(3);
     assertThat(game.getActivePlayer().getCurrentLocation()).isEqualTo(City.Name.BAGHDAD);
     assertThat(game.getActivePlayer().hasCityCard(City.Name.WASHINGTON)).isFalse();
-    assertThat(game.getActivePlayer().isHasSpecialActionUsed()).isTrue();
+    assertThat(game.getActivePlayer().hasSpecialActionUsed()).isTrue();
   }
 
   @Test

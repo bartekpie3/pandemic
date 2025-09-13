@@ -1,4 +1,4 @@
-package com.example.pandemic.infrastructure.repository;
+package com.example.pandemic.infrastructure.repository.Jooq;
 
 import static com.example.jooq.generated.tables.Cities.CITIES;
 import static com.example.jooq.generated.tables.Game.GAME;
@@ -16,8 +16,9 @@ import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.GameRepository;
 import com.example.pandemic.domain.exception.GameNotFound;
 import com.example.pandemic.domain.model.Disease;
-import com.example.pandemic.infrastructure.mapper.JooqGameMapper;
+import com.example.pandemic.domain.model.Player;
 import java.time.OffsetDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Profile("prod")
 @RequiredArgsConstructor
-public class JooqGameRepository implements GameRepository {
+class JooqGameRepository implements GameRepository {
 
   private final JooqGameMapper mapper;
 
@@ -47,38 +48,13 @@ public class JooqGameRepository implements GameRepository {
     }
 
     var createGameHelper = new JooqCreateGameHelper(dsl);
+    var gameId = game.getId().value();
 
-    createGameHelper.createCities(game);
-    createGameHelper.createPlayers(game);
-    createGameHelper.createPlayerDeck(game);
-    createGameHelper.createInfectionDeck(game);
-    createGameHelper.createInfectionDiscardPile(game);
-  }
-
-  private GameRecord prepareGameRecordToSave(Game game) {
-    var gameDiseases = game.diseases();
-    var gameRecord = new GameRecord();
-
-    gameRecord.setId(game.getId().value());
-    gameRecord.set(GAME.CURRENT_PLAYER_TURN, game.getCurrentPlayerTurnIndex());
-    gameRecord.set(GAME.OUTBREAK_MARKER_POSITION, game.getOutbreakTrack().getMarkerPosition());
-    gameRecord.set(
-        GAME.INFECTION_RATE_MARKER_POSITION, game.getInfectionRateTrack().getMarkerPosition());
-    gameRecord.set(GAME.STATE, game.getState());
-    gameRecord.set(GAME.YELLOW_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.YELLOW).isCured());
-    gameRecord.set(
-        GAME.YELLOW_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.YELLOW).isEradicated());
-    gameRecord.set(GAME.RED_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.RED).isCured());
-    gameRecord.set(
-        GAME.RED_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.RED).isEradicated());
-    gameRecord.set(GAME.BLUE_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.BLUE).isCured());
-    gameRecord.set(
-        GAME.BLUE_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.BLUE).isEradicated());
-    gameRecord.set(GAME.BLACK_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.BLACK).isCured());
-    gameRecord.set(
-        GAME.BLACK_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.BLACK).isEradicated());
-
-    return gameRecord;
+    createGameHelper.saveCities(game.cities(), gameId);
+    createGameHelper.savePlayers(game.getPlayers(), gameId);
+    createGameHelper.savePlayerDeck(game.getPlayerDeck(), gameId);
+    createGameHelper.saveInfectionDeck(game.getInfectionDeck(), gameId);
+    createGameHelper.saveInfectionDiscardPile(game.getInfectionDiscardPile(), gameId);
   }
 
   @Override
@@ -90,6 +66,22 @@ public class JooqGameRepository implements GameRepository {
     if (saved != 1) {
       throw new RuntimeException("Game saving failed");
     }
+
+    var saveGameHelper = new JooqSaveGameHelper(dsl);
+    var gameId = game.getId().value();
+
+    saveGameHelper.saveCities(game.cities(), gameId);
+    saveGameHelper.savePlayers(game.getPlayers());
+    saveGameHelper.savePlayerDeck(game.getPlayerDeck(), gameId);
+    saveGameHelper.saveInfectionDeck(game.getInfectionDeck(), gameId);
+    saveGameHelper.saveInfectionDiscardPike(game.getInfectionDiscardPile(), gameId);
+  }
+
+  @Override
+  public void savePlayer(Player player) {
+    var saveGameHelper = new JooqSaveGameHelper(dsl);
+
+    saveGameHelper.savePlayers(List.of(player));
   }
 
   @Override
@@ -131,5 +123,31 @@ public class JooqGameRepository implements GameRepository {
         select(Tables.PLAYER_CARDS)
             .from(Tables.PLAYER_CARDS)
             .where(Tables.PLAYER_CARDS.PLAYER_ID.eq(Tables.PLAYERS.ID)));
+  }
+
+  private GameRecord prepareGameRecordToSave(Game game) {
+    var gameDiseases = game.diseases();
+    var gameRecord = new GameRecord();
+
+    gameRecord.setId(game.getId().value());
+    gameRecord.set(GAME.CURRENT_PLAYER_TURN, game.getCurrentPlayerTurnIndex());
+    gameRecord.set(GAME.OUTBREAK_MARKER_POSITION, game.getOutbreakTrack().getMarkerPosition());
+    gameRecord.set(
+        GAME.INFECTION_RATE_MARKER_POSITION, game.getInfectionRateTrack().getMarkerPosition());
+    gameRecord.set(GAME.STATE, game.getState());
+    gameRecord.set(GAME.YELLOW_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.YELLOW).isCured());
+    gameRecord.set(
+        GAME.YELLOW_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.YELLOW).isEradicated());
+    gameRecord.set(GAME.RED_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.RED).isCured());
+    gameRecord.set(
+        GAME.RED_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.RED).isEradicated());
+    gameRecord.set(GAME.BLUE_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.BLUE).isCured());
+    gameRecord.set(
+        GAME.BLUE_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.BLUE).isEradicated());
+    gameRecord.set(GAME.BLACK_DISEASE_IS_CURED, gameDiseases.get(Disease.Color.BLACK).isCured());
+    gameRecord.set(
+        GAME.BLACK_DISEASE_IS_ERADICATED, gameDiseases.get(Disease.Color.BLACK).isEradicated());
+
+    return gameRecord;
   }
 }

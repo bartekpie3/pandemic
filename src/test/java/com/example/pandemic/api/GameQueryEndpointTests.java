@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.example.pandemic.application.GameCommandService;
 import com.example.pandemic.application.GameMode;
-import com.example.pandemic.application.query.CityDto;
-import com.example.pandemic.application.query.GameDto;
-import com.example.pandemic.application.query.PlayerDto;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
 import com.example.pandemic.domain.Game;
 import com.example.pandemic.domain.model.City;
 import com.example.pandemic.domain.model.Player;

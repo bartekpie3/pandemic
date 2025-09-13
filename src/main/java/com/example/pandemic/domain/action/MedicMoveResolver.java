@@ -8,10 +8,11 @@ import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class MedicMoveResolver {
+final class MedicMoveResolver {
 
   private MedicMoveResolver() {}
 
+  // Rule: Medic automatically removes all cubes of a cured disease from their city
   public static void medicClearCuredDiseaseOnEnter(Player player, Game game) {
     if (!player.roleIs(Player.Role.MEDIC)) {
       return;
@@ -23,7 +24,7 @@ class MedicMoveResolver {
         .filter(game::isDiseaseCured)
         .forEach(
             d -> {
-              destinationCity.treatDisease(d, City.MAX_DISEASE);
+              destinationCity.treatDisease(d, City.MAX_DISEASE_IN_CITY);
 
               log.info("Medic cure {} disease from {} where did he move", d, destinationCity);
 

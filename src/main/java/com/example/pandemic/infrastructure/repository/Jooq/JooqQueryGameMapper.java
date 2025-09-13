@@ -1,12 +1,12 @@
-package com.example.pandemic.infrastructure.mapper;
+package com.example.pandemic.infrastructure.repository.Jooq;
 
 import com.example.jooq.generated.tables.records.CitiesRecord;
 import com.example.jooq.generated.tables.records.GameRecord;
 import com.example.jooq.generated.tables.records.PlayersRecord;
-import com.example.pandemic.application.query.CityDto;
-import com.example.pandemic.application.query.DiseaseDto;
-import com.example.pandemic.application.query.GameDto;
-import com.example.pandemic.application.query.PlayerDto;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.DiseaseDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
 import com.example.pandemic.domain.model.City;
 import com.example.pandemic.domain.model.Disease;
 import java.util.EnumMap;
@@ -20,7 +20,8 @@ import org.jooq.Result;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JooqQueryGameMapper {
+class JooqQueryGameMapper {
+
   public GameDto mapGame(GameRecord gameRecord) {
     return new GameDto(
         gameRecord.getId().toString(),

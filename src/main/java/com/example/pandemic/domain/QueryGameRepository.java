@@ -1,6 +1,8 @@
-package com.example.pandemic.application.query;
+package com.example.pandemic.domain;
 
-import com.example.pandemic.domain.Game;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
 import lombok.NonNull;
 
 import java.util.List;

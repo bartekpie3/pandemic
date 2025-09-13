@@ -49,9 +49,4 @@ final class InfectCitiesStep implements GameStep {
   public void moveToNextStep(Game game) {
     game.goToActionState();
   }
-
-  @Override
-  public boolean canMoveToNextStep(Game game) {
-    return true;
-  }
 }

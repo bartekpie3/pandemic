@@ -22,16 +22,16 @@ final class BuildResearchStationActionHandler
       return validationResult;
     }
 
+    discardRequiredCardIfNeeded(activePlayer);
     currentLocation.buildResearchStation();
-    playerDiscardCard(activePlayer);
     activePlayer.takeAction();
 
     log.info("Player {} built research station in {}", activePlayer, currentLocation);
 
-    return new Result.Success<>("Player built research station");
+    return new Result.Success<>("Player built research station in " + currentLocation.getName());
   }
 
-  private void playerDiscardCard(Player activePlayer) {
+  private void discardRequiredCardIfNeeded(Player activePlayer) {
     if (!activePlayer.roleIs(Player.Role.OPERATIONS_EXPERT)) {
       var cityCard = activePlayer.getCityCard(activePlayer.getCurrentLocation());
 

@@ -1,9 +1,9 @@
 package com.example.pandemic.application;
 
-import com.example.pandemic.application.query.CityDto;
-import com.example.pandemic.application.query.GameDto;
-import com.example.pandemic.application.query.PlayerDto;
-import com.example.pandemic.application.query.QueryGameRepository;
+import com.example.pandemic.domain.dto.CityDto;
+import com.example.pandemic.domain.dto.GameDto;
+import com.example.pandemic.domain.dto.PlayerDto;
+import com.example.pandemic.domain.QueryGameRepository;
 import com.example.pandemic.domain.Game;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

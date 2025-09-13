@@ -1,4 +1,4 @@
-package com.example.pandemic.application.query;
+package com.example.pandemic.domain.dto;
 
 import java.util.Set;
 
