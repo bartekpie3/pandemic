@@ -14,15 +14,15 @@ final class MoveActionHandler implements ActionHandler<MoveActionRequest> {
     var activePlayer = game.getActivePlayer();
     var currentLocation = game.cities().get(activePlayer.getCurrentLocation());
     var moveStrategy = MoveStrategyProvider.getMoveStrategy(action.moveType());
-    var desinationCity = game.cities().get(action.destinationCityName());
+    var destinationCity = game.cities().get(action.destinationCityName());
 
-    if (!moveStrategy.canMove(activePlayer, currentLocation, desinationCity)) {
+    if (!moveStrategy.canMove(activePlayer, currentLocation, destinationCity)) {
       return new Result.Failure<>(
           "Player can not move to this city with this move type: " + action.moveType());
     }
 
-    moveStrategy.moveEffect(activePlayer, desinationCity);
-    activePlayer.setCurrentLocation(desinationCity.getName());
+    moveStrategy.moveEffect(activePlayer, destinationCity);
+    activePlayer.setCurrentLocation(destinationCity.getName());
     activePlayer.takeAction();
 
     // Rule: Medic automatically removes all cubes of a cured disease from their city
@@ -35,6 +35,6 @@ final class MoveActionHandler implements ActionHandler<MoveActionRequest> {
         action.destinationCityName(),
         action.moveType());
 
-    return new Result.Success<>(String.format("Player moved to %s", desinationCity.getName()));
+    return new Result.Success<>(String.format("Player moved to %s", destinationCity.getName()));
   }
 }

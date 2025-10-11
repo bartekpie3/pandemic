@@ -21,16 +21,16 @@ final class DispatcherMovePlayerActionHandler
 
     var playerWhichMoves = game.getPlayer(action.playerIndexWhichMoves());
     var moveStrategy = MoveStrategyProvider.getMoveStrategy(action.moveType());
-    var desinationCity = game.cities().get(action.destinationCityName());
+    var destinationCity = game.cities().get(action.destinationCityName());
     var currentLocation = game.cities().get(playerWhichMoves.getCurrentLocation());
 
-    if (!moveStrategy.canMove(activePlayer, currentLocation, desinationCity)) {
+    if (!moveStrategy.canMove(activePlayer, currentLocation, destinationCity)) {
       return new Result.Failure<>(
           "Player can not move to this city with this move type: " + action.moveType());
     }
 
-    moveStrategy.moveEffect(activePlayer, desinationCity);
-    playerWhichMoves.setCurrentLocation(desinationCity.getName());
+    moveStrategy.moveEffect(activePlayer, destinationCity);
+    playerWhichMoves.setCurrentLocation(destinationCity.getName());
     activePlayer.takeAction();
 
     // Rule: Medic automatically removes all cubes of a cured disease from their city
