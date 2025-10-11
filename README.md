@@ -23,6 +23,11 @@ setup, player turns (actions, draws), infection, and ending conditions.
 
 - docker-compose up -d
 - currently need to run manually src/main/resources/sql/init-schema.sql on DB:
+
+```bash
+docker compose exec -T postgres psql -U pandemic pandemic < ./src/main/resources/sql/init-schema.sql 
+```
+
 - ./gradlew bootRun
 - check [postman collection](./docs/Pandemic.postman_collection.json)
 
